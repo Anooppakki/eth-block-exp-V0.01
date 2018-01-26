@@ -4,7 +4,8 @@ NodeJS based Ethereum blockchain explorer using web3.js interacting with the mai
 
 #### to-do
 * ~~Add feature to check ether balance of an addres.s~~
-* Add feature to check transaction details using tx hash.
+* ~~Add feature to check transaction details using tx hash.~~ 
+* Add a check to verify tx hash
 * Add a dashboard displaying network stats.
 * Add feature to check block details.
 * Websocket support to display transactions and blocks real time. 
