@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>transaction</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<style>
+form{
+  padding: 100px;
+}
+#head{
+  font-size: 45px;
+  margin-left: 75px;
+}
+#input{
+  margin-bottom: 20px;
+}
+#tx-deets{
+  margin-left: 100px;
+  margin-top: -25px;
+}
+.inline{
+  display: inline;
+}
+</style>
+<body>
+  <div id="head"><b>Check transaction details</b></div>
+<form id="submit" action="/balance" method="post">
+  <input type="text" name="value" style="width: 450px;" maxlength="66" required><br><br>
+  <input type="submit" value="check">
+</form>
+<script>
+	 $(document).ready(function  () {
+	 	$("#submit").on("submit",function  (e) {
+	 		e.preventDefault();
+	 		console.log();
+	 		$.post("/transaction",$(this).serialize(), function( data ) {
+			  console.log(data);
+			});
+	 	})
+	 });
+</script>
+<script>
+var socket = io.connect('http://localhost:9001');
+socket.on('transaction-deets',function(data){
+  txHash.innerHTML = (data.hash).bold();
+  blockNo.innerHTML = ("#"+data.blockNumber).bold();
+  from.innerHTML = (data.from).bold();
+  to.innerHTML = (data.to).bold();
+  input.innerHTML = (data.input).bold();
+  nonce.innerHTML = (JSON.stringify(data.nonce)).bold();
+  gasPrice.innerHTML = (data.final_gasPrice).bold();
+  gasLimit.innerHTML = (JSON.stringify(data.gas)).bold();
+  value.innerHTML = (data.final_value).bold();
+})
+</script>
+<div id="tx-deets">
+  <div><b>Tx: </b></div><br>
+  <div class="inline">Transaction Hash: </div>
+  <div class="inline" style="margin-left:10px;" id="txHash"></div><br><br>
+  <div class="inline">Block:</div>
+  <div class="inline" style="margin-left:84px;" id="blockNo"></div><br><br>
+  <div class="inline">From: </div>
+  <div class="inline" style="margin-left:87.5px;" id="from"></div><br><br>
+  <div class="inline">To:</div>
+  <div class="inline" style="margin-left:105px;" id="to"></div><br><br>
+  <div class="inline">Value:</div>
+  <div class="inline" style="margin-left:84px;" id="value"></div><br><br>
+  <div class="inline">Gas Limit:</div>
+  <div class="inline" style="margin-left:55px;" id="gasLimit"></div><br><br>
+  <div class="inline">Gas Price:</div>
+  <div class="inline" style="margin-left:57px;" id="gasPrice"></div><br><br>
+  <div class="inline">Nonce:</div>
+  <div class="inline" style="margin-left:76px;" id="nonce"></div><br><br>
+  <div class="inline">Input:</div>
+  <div class="inline" style="margin-left:84px;" id="input"></div><br><br>
+</div>
+</div>
+</body>
+</html>
