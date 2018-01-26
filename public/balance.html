@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>balance</title>
+</head>
+<style>
+form{
+  padding: 100px;
+}
+#head{
+  font-size: 45px;
+  margin-left: 75px;
+}
+#input{
+  margin-bottom: 20px;
+}
+#balance{
+  margin-left: 100px;
+  margin-top: -25px;
+  display: block;
+}
+
+</style>
+<body>
+  <div id="head"><b>Check Balance</b></div>
+<form id="submit" action="/balance" method="post">
+  <input type="text" name="value" style="width: 300px;" maxlength="42" required><br>
+  <input type="submit" value="check">
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	 $(document).ready(function  () {
+	 	$("#submit").on("submit",function  (e) {
+	 		e.preventDefault();
+	 		console.log();
+	 		$.post("/balance",$(this).serialize(), function( data ) {
+			  console.log(data);
+			});
+	 	})
+	 });
+</script>
+<script>
+var socket = io.connect('http://localhost:9001');
+socket.on('balance', function(data){
+  balance_value.innerHTML = data;
+});
+socket.on('check-fail', function(data){
+  alert("not a valid eth address")
+})
+</script>
+<div id="balance"><b>Balance: </b>
+  <div id="balance_value"></div>
+</div>
+</body>
+</html>

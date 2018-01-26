@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>block-exp</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <style>
+  h1{
+    margin: 50px;
+  }
+  #container{
+    margin-left: 60px;
+  }
+  #balance, #transaction, #network{
+    margin-bottom: 5px;
+  }
+  </style>
+</head>
+<body>
+<h1>EthExp</h1>
+<div id="container">
+  <div id="balance">
+    <a href="/balance">balance</a>
+  </div>
+  <div id="transaction">
+    <a href="/transaction">transaction details</a>
+  </div>
+  <div id="network">
+    <a href="/network">network stats</a>
+  </div>
+  <div id="block">
+    <a href="/block">block details</a>
+  </div>
+</div>
+</body>
+</html>
