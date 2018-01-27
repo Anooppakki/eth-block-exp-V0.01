@@ -38,9 +38,14 @@ app.get("/transaction",function(req,res){
 app.post("/transaction", function(req,res){
   var tx_hash = req.body.value;
   var object = web3.eth.getTransaction(tx_hash)
-  var final_value = (web3.fromWei((object.value).toNumber(),'ether')) + " Ether";
-  var final_gasPrice = (web3.fromWei((object.gasPrice).toNumber(),'ether')) + " Ether";
-  object.final_value=final_value;
-  object.final_gasPrice=final_gasPrice;
-  io.emit('transaction-deets',(object));
+  if(object===null){
+    io.emit('tx-hash-invalid')
+  }
+  else{
+    var final_value = (web3.fromWei((object.value).toNumber(),'ether')) + " Ether";
+    var final_gasPrice = (web3.fromWei((object.gasPrice).toNumber(),'ether')) + " Ether";
+    object.final_value=final_value;
+    object.final_gasPrice=final_gasPrice;
+    io.emit('transaction-deets',(object));
+  }
 })

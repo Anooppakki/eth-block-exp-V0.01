@@ -19,7 +19,7 @@ form{
 #input{
   margin-bottom: 20px;
 }
-#tx-deets{
+#txDeets{
   margin-left: 100px;
   margin-top: -25px;
 }
@@ -30,7 +30,7 @@ form{
 <body>
   <div id="head"><b>Check transaction details</b></div>
 <form id="submit" action="/balance" method="post">
-  <input type="text" name="value" style="width: 450px;" maxlength="66" required><br><br>
+  <input type="text" name="value" style="width: 450px;" maxlength="66" pattern="^0x([A-Fa-f0-9]{64})$" title="Enter a valid TX hash" required><br><br>
   <input type="submit" value="check">
 </form>
 <script>
@@ -46,7 +46,20 @@ form{
 </script>
 <script>
 var socket = io.connect('http://localhost:9001');
+socket.on('tx-hash-invalid',function(data){
+  err.innerHTML = "TX hash isn't valid";
+  txHash.innerHTML = null;
+  blockNo.innerHTML = null;
+  from.innerHTML = null;
+  to.innerHTML = null;
+  input.innerHTML = null;
+  nonce.innerHTML = null;
+  gasPrice.innerHTML = null;
+  gasLimit.innerHTML = null;
+  value.innerHTML = null;
+})
 socket.on('transaction-deets',function(data){
+  err.innerHTML = null;
   txHash.innerHTML = (data.hash).bold();
   blockNo.innerHTML = ("#"+data.blockNumber).bold();
   from.innerHTML = (data.from).bold();
@@ -58,7 +71,8 @@ socket.on('transaction-deets',function(data){
   value.innerHTML = (data.final_value).bold();
 })
 </script>
-<div id="tx-deets">
+<div id="txDeets">
+  <div id="err"></div><br>
   <div><b>Tx: </b></div><br>
   <div class="inline">Transaction Hash: </div>
   <div class="inline" style="margin-left:10px;" id="txHash"></div><br><br>
