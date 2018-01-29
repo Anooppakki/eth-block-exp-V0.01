@@ -49,3 +49,19 @@ app.post("/transaction", function(req,res){
     io.emit('transaction-deets',(object));
   }
 })
+
+app.get("/blocks",function(req,res){
+  res.sendFile(__dirname + '/public/blocks.html')
+})
+
+app.post("/blocks",function(req,res){
+  var block = req.body.value;
+  var test = web3.eth.getBlock(block);
+  if(test===null){
+    io.emit('block-error');
+  }
+  else{
+
+    io.emit('block-deets',test);
+  }
+})

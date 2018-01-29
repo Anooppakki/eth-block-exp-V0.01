@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>blocks</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<style>
+form{
+  padding: 100px;
+}
+#head{
+  font-size: 45px;
+  margin-left: 75px;
+}
+#input{
+  margin-bottom: 20px;
+}
+#txDeets{
+  margin-left: 100px;
+  margin-top: -25px;
+}
+.inline{
+  display: inline;
+}
+</style>
+<body>
+  <div id="head"><b>Check Block details</b></div>
+<form id="submit" action="/blocks" method="post">
+  <input type="text" name="value" style="width: 450px;" maxlength="66" pattern="^^(0|[1-9][0-9]*)$" title="Enter a valid block number" required><br><br>
+  <input type="submit" value="check">
+</form>
+<script>
+	 $(document).ready(function  () {
+	 	$("#submit").on("submit",function  (e) {
+	 		e.preventDefault();
+	 		console.log();
+	 		$.post("/blocks",$(this).serialize(), function( data ) {
+			  console.log(data);
+			});
+	 	})
+	 });
+</script>
+<script>
+var socket = io.connect('http://localhost:9001');
+socket.on('block-error',function(data){
+  err.innerHTML = "Block hasn't been mined yet";
+  blockNo.innerHTML = null;
+  timestamp.innerHTML = null;
+  hash.innerHTML = null;
+  parentHash.innerHTML = null;
+  Sha3Uncles.innerHTML = null;
+  miner.innerHTML = null;
+  Difficulty.innerHTML = null;
+  tDifficulty.innerHTML = null;
+  size.innerHTML = null;
+  gasUsed.innerHTML = null;
+  gasLimit.innerHTML = null;
+  nonce.innerHTML = null;
+  xData.innerHTML = null;
+})
+socket.on('block-deets',function(data){
+  err.innerHTML = null;
+  blockNo.innerHTML = JSON.stringify((data.number)).bold();
+  timestamp.innerHTML = (new Date((data.timestamp)*1000));
+  hash.innerHTML = (data.hash).bold();
+  parentHash.innerHTML = (data.parentHash).bold();
+  Sha3Uncles.innerHTML = (data.sha3Uncles).bold();
+  miner.innerHTML = (data.miner).bold();
+  Difficulty.innerHTML = (data.difficulty).bold();
+  tDifficulty.innerHTML = (data.totalDifficulty).bold();
+  size.innerHTML = JSON.stringify(data.size).bold();
+  gasUsed.innerHTML = JSON.stringify(data.gasUsed).bold();
+  gasLimit.innerHTML = JSON.stringify(data.gasLimit).bold();
+  nonce.innerHTML = (data.nonce).bold();
+  //reward.innerHTML = 5;
+  xData.innerHTML = (data.extraData).bold();
+})
+</script>
+<div id="txDeets">
+  <div id="err"></div><br>
+  <div><b>Block: </b></div><br>
+  <div class="inline">Block #: </div>
+  <div class="inline" style="margin-left:150px;" id="blockNo"></div><br><br>
+  <div class="inline">Timestamp:</div>
+  <div class="inline" style="margin-left:130px;" id="timestamp"></div><br><br>
+  <div class="inline">Hash: </div>
+  <div class="inline" style="margin-left:168px;" id="hash"></div><br><br>
+  <div class="inline">Parent Hash:</div>
+  <div class="inline" style="margin-left:123px;" id="parentHash"></div><br><br>
+  <div class="inline">Sha3Uncles:</div>
+  <div class="inline" style="margin-left:123px;" id="Sha3Uncles"></div><br><br>
+  <div class="inline">Mined By:</div>
+  <div class="inline" style="margin-left:135px;" id="miner"></div><br><br>
+  <div class="inline">Difficulty:</div>
+  <div class="inline" style="margin-left:137px;" id="Difficulty"></div><br><br>
+  <div class="inline">Total Difficulty:</div>
+  <div class="inline" style="margin-left:100px;" id="tDifficulty"></div><br><br>
+  <div class="inline">Size:</div>
+  <div class="inline" style="margin-left:171px;" id="size"></div><br><br>
+  <div class="inline">Gas used:</div>
+  <div class="inline" style="margin-left:140px;" id="gasUsed"></div><br><br>
+  <div class="inline">Gas limit:</div>
+  <div class="inline" style="margin-left:139px;" id="gasLimit"></div><br><br>
+  <div class="inline">Nonce:</div>
+  <div class="inline" style="margin-left:155px;" id="nonce"></div><br><br>
+  <div class="inline">Extra Data:</div>
+  <div class="inline" style="margin-left:128px;" id="xData"></div><br><br>
+</div>
+</div>
+</body>
+</html>
